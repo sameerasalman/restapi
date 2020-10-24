@@ -1,5 +1,5 @@
 import express from 'express'
-import { json, urlencoded } from 'body-parser'
+import bodyParser, { json, urlencoded } from 'body-parser'
 import morgan from 'morgan'
 import config from './config'
 import cors from 'cors'
@@ -15,6 +15,16 @@ app.use(json())
 app.use(urlencoded({ extended:true }))
 app.use(morgan(dev))
 
+app.use(bodyParser.json());
+
+//CORS HEADERS MIDDLEWARE
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "YOUR-DOMAIN.TLD"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
 app.use('/api/user', userRouter)
 export const start = async () => {
   try {
@@ -23,4 +33,9 @@ export const start = async () => {
 
     })
   }
+  catch(error) {
+    console.error(error);
+  }
 }
+
+ 
